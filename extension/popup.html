@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DomainMeter</title>
+  <style>
+    body { font: 13px/1.4 Georgia, serif; width: 320px; margin: 0; background: #f4efe6; color: #1c1915; }
+    header, section { padding: 10px 12px; }
+    header { background: #1c1915; color: #f4efe6; display: flex; justify-content: space-between; }
+    label { display: block; margin: 6px 0; color: #6d645b; }
+    input { width: 100%; box-sizing: border-box; padding: 4px; }
+    table { width: 100%; border-collapse: collapse; }
+    td { padding: 3px 0; border-bottom: 1px solid #e4dccf; }
+    td:last-child { text-align: right; }
+    button { margin-top: 8px; margin-right: 6px; }
+    .fine { color: #6d645b; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <header><strong>DomainMeter</strong><span id="today"></span></header>
+  <section>
+    <label>Hourly rate <input id="rate" type="number" min="0" step="1" /></label>
+    <label>Pro key <input id="key" placeholder="DM-PRO" /></label>
+    <table id="rows"></table>
+    <p id="total"></p>
+    <button id="csv">Export CSV</button>
+    <button id="reset">Clear today</button>
+    <p class="fine">Free plan lists 3 sites. Pro key DM-PRO unlocks the full day. Minutes accrue while Chrome is focused.</p>
+  </section>
+  <script src="popup.js"></script>
+</body>
+</html>
