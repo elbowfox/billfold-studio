@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Billfold — invoices, estimates, change orders</title>
+  <meta name="description" content="Send clean invoices, estimates, and change orders from the browser. No account required. Upgrade to remove the mark and lift the monthly cap." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="mark">Bf</span>
+      <div>
+        <strong>Billfold</strong>
+        <small>Studio</small>
+      </div>
+    </div>
+    <nav>
+      <button data-view="editor" class="nav on">Document</button>
+      <button data-view="archive" class="nav">Archive</button>
+      <button data-view="upgrade" class="nav">Upgrade</button>
+    </nav>
+    <div class="plan" id="planBadge">Free · 0/3 this month</div>
+  </header>
+
+  <main id="editor" class="layout">
+    <section class="panel">
+      <div class="row">
+        <label>Type
+          <select id="docType">
+            <option value="Invoice">Invoice</option>
+            <option value="Estimate">Estimate</option>
+            <option value="Change order">Change order</option>
+          </select>
+        </label>
+        <label>Number
+          <input id="docNumber" />
+        </label>
+        <label>Issue date
+          <input id="issueDate" type="date" />
+        </label>
+        <label>Due / valid
+          <input id="dueDate" type="date" />
+        </label>
+      </div>
+
+      <h2>Your business</h2>
+      <div class="grid2">
+        <label>Name <input id="bizName" placeholder="Northline Studio" /></label>
+        <label>Email <input id="bizEmail" placeholder="hello@studio.com" /></label>
+        <label>Address <input id="bizAddress" placeholder="City, region" /></label>
+        <label>Payment note <input id="payNote" placeholder="Bank / PayPal / Stripe link" /></label>
+      </div>
+
+      <h2>Client</h2>
+      <div class="grid2">
+        <label>Name <input id="clientName" placeholder="Client or company" /></label>
+        <label>Email <input id="clientEmail" placeholder="ap@client.com" /></label>
+        <label class="span2">Address <input id="clientAddress" placeholder="Billing address" /></label>
+      </div>
+
+      <h2>Line items</h2>
+      <table class="items">
+        <thead>
+          <tr><th>Description</th><th>Qty</th><th>Rate</th><th></th></tr>
+        </thead>
+        <tbody id="lines"></tbody>
+      </table>
+      <button id="addLine" class="ghost">Add line</button>
+
+      <div class="grid3 totals-in">
+        <label>Tax % <input id="tax" type="number" min="0" step="0.1" value="0" /></label>
+        <label>Discount <input id="discount" type="number" min="0" step="0.01" value="0" /></label>
+        <label>Currency
+          <select id="currency">
+            <option>USD</option><option>EUR</option><option>GBP</option><option>CAD</option><option>AUD</option>
+          </select>
+        </label>
+      </div>
+      <label>Notes <textarea id="notes" rows="3" placeholder="Scope, revision terms, late fee."></textarea></label>
+
+      <div class="actions">
+        <button id="saveDoc" class="primary">Save to archive</button>
+        <button id="printDoc" class="ghost">Print / PDF</button>
+        <button id="newDoc" class="ghost">New</button>
+      </div>
+    </section>
+
+    <section class="preview-wrap">
+      <article id="sheet" class="sheet">
+        <header class="sheet-head">
+          <div>
+            <p class="kicker" id="pType">Invoice</p>
+            <h1 id="pBiz">Your studio</h1>
+            <p id="pBizMeta"></p>
+          </div>
+          <div class="sheet-meta">
+            <p><span>No.</span> <strong id="pNumber"></strong></p>
+            <p><span>Issued</span> <strong id="pIssue"></strong></p>
+            <p><span>Due</span> <strong id="pDue"></strong></p>
+          </div>
+        </header>
+        <div class="billto">
+          <p class="kicker">Bill to</p>
+          <strong id="pClient">Client</strong>
+          <p id="pClientMeta"></p>
+        </div>
+        <table>
+          <thead><tr><th>Description</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead>
+          <tbody id="pLines"></tbody>
+        </table>
+        <div class="sum">
+          <p><span>Subtotal</span><strong id="pSub"></strong></p>
+          <p><span>Discount</span><strong id="pDisc"></strong></p>
+          <p><span>Tax</span><strong id="pTax"></strong></p>
+          <p class="due"><span>Amount due</span><strong id="pDueAmt"></strong></p>
+        </div>
+        <p id="pNotes" class="notes"></p>
+        <p id="pPay" class="pay"></p>
+        <p id="watermark" class="wm">Made with Billfold · billfold studio</p>
+      </article>
+    </section>
+  </main>
+
+  <section id="archive" class="view hidden">
+    <h2>Archive</h2>
+    <p class="lede">Stored in this browser only. Export before you clear site data.</p>
+    <div id="archiveList"></div>
+  </section>
+
+  <section id="upgrade" class="view hidden">
+    <h2>Pro</h2>
+    <p class="lede">Free plan: 3 saved documents a month and a small mark on the PDF. Pro removes both.</p>
+    <div class="price">
+      <div>
+        <h3>$12<span>/mo</span> or $79 lifetime</h3>
+        <ul>
+          <li>Unlimited invoices, estimates, change orders</li>
+          <li>No watermark</li>
+          <li>Same file, your Stripe link</li>
+        </ul>
+      </div>
+    </div>
+    <label>Stripe Payment Link (you paste this after creating it)
+      <input id="stripeLink" placeholder="https://buy.stripe.com/..." />
+    </label>
+    <a id="buyLink" class="primary linkbtn" href="#" target="_blank" rel="noopener">Open checkout</a>
+    <label>License key
+      <input id="license" placeholder="BF-PRO-..." />
+    </label>
+    <button id="activate" class="primary">Activate</button>
+    <p id="licenseMsg"></p>
+    <p class="fine">Keys are checked locally against the secret in <code>app.js</code>. Replace <code>LICENSE_SECRET</code> before you sell keys. A one-line checkout webhook can email the key; no app server is required for the product itself.</p>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
